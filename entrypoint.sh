@@ -20,7 +20,7 @@ $IPTABLES -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 $IPTABLES -A INPUT -s 192.168.0.0/24 -j ACCEPT
 
 # Allow the container to respond to internet traffic but block new traffic to the LAN
-$IPTABLES -A INPUT -p tcp --dport 99 -j ACCEPT  # Example port 80 for HTTP
+$IPTABLES -A INPUT -p tcp --dport 99 -j ACCEPT  
 $IPTABLES -A OUTPUT -p tcp --sport 99 -d 192.168.0.0/24 -j ACCEPT
 
 # Allow traffic to and from the gateway
