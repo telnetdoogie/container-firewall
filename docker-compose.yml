@@ -1,0 +1,28 @@
+services:
+  firewall:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: firewall
+    cap_add:
+      - NET_ADMIN
+    restart: always
+
+  dozzle_isolated:
+    container_name: dozzle_isolated
+    mem_limit: 128m
+    image: amir20/dozzle:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 99:8080
+
+networks:
+  default:
+    name: isolated_net
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.201.0/24
+          gateway: 172.16.201.1
