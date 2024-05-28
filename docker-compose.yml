@@ -6,6 +6,7 @@ services:
     container_name: firewall
     cap_add:
       - NET_ADMIN
+    privileged: true
     restart: always
 
   dozzle_isolated:
