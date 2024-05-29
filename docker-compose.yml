@@ -1,29 +1,23 @@
 services:
   firewall:
-    build:
-      context: .
-      dockerfile: Dockerfile
     container_name: firewall
+    entrypoint: "tail -f /dev/null"
+    image: alpine:latest
     cap_add:
       - NET_ADMIN
     privileged: true
     restart: always
-
-  dozzle_isolated:
-    container_name: dozzle_isolated
-    mem_limit: 128m
-    image: amir20/dozzle:latest
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /etc/localtime:/etc/localtime:ro
     ports:
-      - 99:8080
+      - 99:80
+    volumes:
+      - ./iptables.sh:/iptables.sh
 
-networks:
-  default:
-    name: isolated_net
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.16.201.0/24
-          gateway: 172.16.201.1
+  alpine_isolated:
+    container_name: alpine_isolated
+    network_mode: container:firewall
+    depends_on: 
+      - firewall
+    mem_limit: 128m
+    image: alpine:latest
+    entrypoint: "tail -f /dev/null"
+
